@@ -20,9 +20,12 @@ Source0:	http://www.kannel.org/download/%{version}/gateway-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
+Patch0:		%{name}-types.patch
+Patch1:		%{name}-nolibs.patch
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
 BuildRequires:	libxml2-devel
+BuildRequires:	autoconf
 %{!?_without_mysql:BuildRequires:	mysql-devel}
 %{?_with_docs:BuildRequires:	openjade}
 # requires multithread enabled openssl (?)
@@ -51,9 +54,12 @@ SMS, wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
 
 %prep
 %setup -q -n gateway-%{version}
+%patch0 -p1
+%patch1 -p1
 
 %build
-%configure2_13 \
+%{__autoconf}
+%configure \
 	--with-malloc-native \
 	--enable-cookies \
 	--%{!?_without_mysql:en}%{?_without_mysql:dis}able-mysql \
