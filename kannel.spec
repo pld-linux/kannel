@@ -23,8 +23,9 @@ Patch0:		%{name}-types.patch
 Patch1:		%{name}-nolibs.patch
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
-BuildRequires:	libxml2-devel
+BuildRequires:	automake
 BuildRequires:	autoconf
+BuildRequires:	libxml2-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 %{?with_doc:BuildRequires:	openjade}
 # requires multithread enabled openssl (?)
@@ -57,6 +58,7 @@ SMS, wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
 %patch1 -p1
 
 %build
+cp -f /usr/share/automake/config.sub .
 %{__autoconf}
 %configure \
 	--with-malloc-native \
