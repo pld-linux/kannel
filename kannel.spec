@@ -30,21 +30,22 @@ Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Kannel is an Open Source SMS/WAP gateway. WAP is short for Wireless Application
-Protocol. It lets the phone act as a simple hypertext browser, but optimizes
-the markup language, scripting language, and the transmission protocols for
-wirelessuse. The optimized protocols are translated to normal Internet
-protocols by a WAP gateway. Kannel also works as a SMS gateway for GSM
-networks. Almost all GSM phones can send and receive SMS messages, so this is a
-way to serve many more clients than just those using WAP phones.
+Kannel is an Open Source SMS/WAP gateway. WAP is short for Wireless
+Application Protocol. It lets the phone act as a simple hypertext
+browser, but optimizes the markup language, scripting language, and
+the transmission protocols for wirelessuse. The optimized protocols
+are translated to normal Internet protocols by a WAP gateway. Kannel
+also works as a SMS gateway for GSM networks. Almost all GSM phones
+can send and receive SMS messages, so this is a way to serve many more
+clients than just those using WAP phones.
 
 %description -l pl
-Kannel jest bramk± SMS/WAP Open Source. WAP pozwala u¿ywaæ telefonów jako
-prostych przegl±darek hipertekstowych ale korzysta ze zoptymalizowanych
-protoko³ów transmisji.  Bramka WAP t³umaczy je na protoko³y internetowe. Kannel
-dzia³a równie¿ jako bramka SMS dla sieci GSM. Prawie wszystkie telefony GSM
-mog± odbieraæ i wysy³aæ wiadomo¶ci SMS wiêc pozwala to na obs³ugê wiêkszej
-liczby klientów.
+Kannel jest bramk± SMS/WAP Open Source. WAP pozwala u¿ywaæ telefonów
+jako prostych przegl±darek hipertekstowych ale korzysta ze
+zoptymalizowanych protoko³ów transmisji. Bramka WAP t³umaczy je na
+protoko³y internetowe. Kannel dzia³a równie¿ jako bramka SMS dla sieci
+GSM. Prawie wszystkie telefony GSM mog± odbieraæ i wysy³aæ wiadomo¶ci
+SMS wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
 
 %prep
 %setup -q -n gateway-%{version}
