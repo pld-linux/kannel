@@ -89,12 +89,22 @@ install test/fakewap $RPM_BUILD_ROOT%{_bindir}
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/chkconfig --add %{name}
+if [ "$1" = "1" ]; then
+	/sbin/chkconfig --add %{name}
+	echo "Run \"/etc/rc.d/init.d/kannel start\" to start kannel." >&2
+else
+	if [ -f /var/lock/subsys/kannel ]; then
+		/etc/rc.d/init.d/kannel restart >&2
+	fi
+fi
+
 
 %preun
 if [ "$1" = "0" ]; then
-	/etc/rc.d/init.d/%{name} stop
-	/sbin/chkconfig --del %{name}
+        if [ -f /var/lock/subsys/kannel ]; then
+                /etc/rc.d/init.d/kannel stop >&2
+        fi
+        /sbin/chkconfig --del kannel
 fi
 
 %files
