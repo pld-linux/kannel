@@ -26,7 +26,14 @@ CONFIGFILE=/etc/kannel/kannel.conf
 [ -f /etc/sysconfig/kannel ] && . /etc/sysconfig/kannel
 
 # Check that networking is up
-[ ${NETWORKING} = "no" ] && exit 0;
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status -a "$1" != init ]; then
+		msg_network_down Kannel
+		exit 1
+	fi
+else
+	exit 0
+fi
 
 STARTER="/usr/sbin/run_kannel_box"
 
@@ -43,7 +50,7 @@ case "$1" in
 		[ $RETVAL1 -eq 0 -a $RETVAL2 -eq 0 ] && touch /var/lock/subsys/kannel ||\
 		RETVAL=1
 	else
-		msg_Already_Running "Kannel gateway"
+		msg_already_running "Kannel gateway"
 		exit 1
 	fi
         ;;
@@ -53,20 +60,21 @@ case "$1" in
 		killproc "$STARTER"
 		rm -f /var/lock/subsys/kannel >/dev/null 2>&1
 	else
-		msg_Not_Running "Kannel gateway"
+		msg_not_running "Kannel gateway"
 		exit 1
 	fi	
 	;;
   status)
         status kannel
+	exit $?
         ;;
   restart|reload)
         $0 stop
         $0 start
         ;;
     *)
-	msg_Usage "$0 {start|stop|status|restart|reload}"
-	exit 1
+	msg_usage "$0 {start|stop|status|restart|reload}"
+	exit 3
 	;;
 esac
 
