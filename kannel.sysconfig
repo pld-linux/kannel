@@ -1,4 +1,4 @@
-# Customized setings for kannel
+# Customized settings for kannel
 
 # Nice level for kannel boxes
 SERVICE_RUN_NICE_LEVEL="+5"
