@@ -78,8 +78,8 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,8}}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install -D %{SOURCE1}	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
-install -D %{SOURCE2}	$RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
+install -D %{SOURCE1}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install -D %{SOURCE2}	$RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install -D %{SOURCE3}	$RPM_BUILD_ROOT%{_sysconfdir}/kannel/%{name}.conf
 install gw/smskannel.conf $RPM_BUILD_ROOT%{_sysconfdir}/kannel/smskannel.conf
 install test/fakesmsc $RPM_BUILD_ROOT%{_bindir}
@@ -113,7 +113,7 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kannel/kannel.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kannel/smskannel.conf
 %dir %{_sysconfdir}/kannel
