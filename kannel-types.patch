@@ -1,0 +1,16 @@
+--- gateway-1.2.0/gwlib/log.c.orig	2001-01-22 12:23:43.000000000 +0000
++++ gateway-1.2.0/gwlib/log.c	2003-12-06 17:27:32.000000000 +0000
+@@ -231,13 +231,8 @@
+     int translog;
+     
+     if (level >= sysloglevel && dosyslog) {
+-	if (args == NULL) {
+-	    strncpy(buf, format, sizeof(buf));
+-	    buf[sizeof(buf) - 1] = '\0';
+-	} else {
+ 	    vsnprintf(buf, sizeof(buf), format, args);
+ 	    /* XXX vsnprint not 100% portable */
+-	}
+ 
+ 	switch(level) {
+ 	case GW_DEBUG:
