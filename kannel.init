@@ -6,8 +6,8 @@
 # Author:	Maciej Witkowiak <ytm@elysium.pl>
 # chkconfig:	345 97 03
 # description:	start and stop the Kannel WAP gateway used to fetch \
-#               some WML content from a web server and compile it into \
-#               WMLC mobile phone bytecode.
+#		some WML content from a web server and compile it into \
+#		WMLC mobile phone bytecode.
 # processname:	bearerbox
 # config:	/etc/sysconfig/kannel
 
@@ -37,9 +37,10 @@ fi
 
 STARTER="/usr/sbin/run_kannel_box"
 
+RETVAL=0
 # See how we were called.
 case "$1" in
-    start)
+  start)
 	if [ ! -f /var/lock/subsys/kannel ]; then
 		msg_starting "Kannel gateway (bearerbox)"
 		daemon "$STARTER" /usr/sbin/bearerbox -- $CONFIGFILE
@@ -51,31 +52,28 @@ case "$1" in
 		RETVAL=1
 	else
 		msg_already_running "Kannel gateway"
-		exit 1
 	fi
-        ;;
-    stop)
-    	if [ -f /var/lock/subsys/kannel ]; then
+	;;
+  stop)
+	if [ -f /var/lock/subsys/kannel ]; then
 		msg_stopping "Kannel gateway"
 		killproc "$STARTER"
 		rm -f /var/lock/subsys/kannel >/dev/null 2>&1
 	else
 		msg_not_running "Kannel gateway"
-		exit 1
 	fi	
 	;;
   status)
-        status kannel
+	status kannel
 	exit $?
-        ;;
-  restart|reload)
-        $0 stop
-        $0 start
-        ;;
-    *)
-	msg_usage "$0 {start|stop|status|restart|reload}"
-	exit 3
 	;;
+  restart|force-reload)
+	$0 stop
+	$0 start
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
