@@ -6,6 +6,7 @@ Release:	1
 License:	BSD
 Group:		Networking/Daemons
 Source0:	http://www.kannel.org/download/1.2.0/gateway-1.2.0.tar.gz
+# Source0-md5:	963502f15909ff3e53f5f7b2d8bdb218
 Source1:	%{name}.init
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
