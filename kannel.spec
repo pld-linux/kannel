@@ -71,14 +71,14 @@ install -d $RPM_BUILD_ROOT%{_mandir}/man{1,8}
 #install -d $RPM_BUILD_ROOT/home/httpd/html
 
 #install mini_httpd	$RPM_BUILD_ROOT%{_sbindir}
-#install	htpasswd	$RPM_BUILD_ROOT%{_bindir}/mini-htpasswd
+#install htpasswd	$RPM_BUILD_ROOT%{_bindir}/mini-htpasswd
 #install *.1		$RPM_BUILD_ROOT%{_mandir}/man1
 #install *.8		$RPM_BUILD_ROOT%{_mandir}/man8
 
 # install index.html	$RPM_BUILD_ROOT/home/httpd/html
 install -D %{SOURCE1}	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
-install -D %{SOURCE2}      $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
-install -D %{SOURCE3}      $RPM_BUILD_ROOT%{_sysconfdir}/kannel/%{name}.conf
+install -D %{SOURCE2}	$RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
+install -D %{SOURCE3}	$RPM_BUILD_ROOT%{_sysconfdir}/kannel/%{name}.conf
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -103,10 +103,10 @@ fi
 
 %preun
 if [ "$1" = "0" ]; then
-        if [ -f /var/lock/subsys/kannel ]; then
-                /etc/rc.d/init.d/kannel stop >&2
-        fi
-        /sbin/chkconfig --del kannel
+	if [ -f /var/lock/subsys/kannel ]; then
+		/etc/rc.d/init.d/kannel stop >&2
+	fi
+	/sbin/chkconfig --del kannel
 fi
 
 %files
