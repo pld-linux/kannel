@@ -1,0 +1,73 @@
+#!/bin/sh
+#
+# kannel:	This shell script takes care of starting and stopping
+#		the Kannel WAP gateway
+#
+# Author:	Maciej Witkowiak <ytm@elysium.pl>
+# chkconfig:	345 97 03
+# description:	start and stop the Kannel WAP gateway used to fetch \
+#               some WML content from a web server and compile it into \
+#               WMLC mobile phone bytecode.
+# processname:	bearerbox
+# config:	/etc/sysconfig/kannel
+
+# Sanity checks.
+[ -x /usr/sbin/bearerbox ] || exit 0
+[ -x /usr/sbin/wapbox ] || exit 0
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source network configuration
+. /etc/sysconfig/network
+
+# Get service config
+CONFIGFILE=/etc/kannel/kannel.conf
+[ -f /etc/sysconfig/kannel ] && . /etc/sysconfig/kannel
+
+# Check that networking is up
+[ ${NETWORKING} = "no" ] && exit 0;
+
+STARTER="/usr/sbin/run_kannel_box"
+
+# See how we were called.
+case "$1" in
+    start)
+	if [ ! -f /var/lock/subsys/kannel ]; then
+		msg_starting "Kannel gateway (bearerbox)"
+		daemon "$STARTER" /usr/sbin/bearerbox -- $CONFIGFILE
+		RETVAL1=$?
+		msg_starting "Kannel gateway (wapbox)"
+		daemon "$STARTER" /usr/sbin/wapbox -- $CONFIGFILE
+		RETVAL2=$?
+		[ $RETVAL1 -eq 0 -a $RETVAL2 -eq 0 ] && touch /var/lock/subsys/kannel ||\
+		RETVAL=1
+	else
+		msg_Already_Running "Kannel gateway"
+		exit 1
+	fi
+        ;;
+    stop)
+    	if [ -f /var/lock/subsys/kannel ]; then
+		msg_stopping "Kannel gateway"
+		killproc "$STARTER"
+		rm -f /var/lock/subsys/kannel >/dev/null 2>&1
+	else
+		msg_Not_Running "Kannel gateway"
+		exit 1
+	fi	
+	;;
+  status)
+        status kannel
+        ;;
+  restart|reload)
+        $0 stop
+        $0 start
+        ;;
+    *)
+	msg_Usage "$0 {start|stop|status|restart|reload}"
+	exit 1
+	;;
+esac
+
+exit $RETVAL
