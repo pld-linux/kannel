@@ -20,7 +20,6 @@ Source0:	http://www.kannel.org/download/%{version}/gateway-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
-Patch0:		%{name}-alpha.patch
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
 BuildRequires:	libxml2-devel
@@ -52,7 +51,6 @@ SMS, wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
 
 %prep
 %setup -q -n gateway-%{version}
-%patch0
 
 %build
 %configure2_13 \
