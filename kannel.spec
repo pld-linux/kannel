@@ -5,15 +5,15 @@ Version:	1.2.0
 Release:	1
 License:	BSD
 Group:		Networking/Daemons
-URL:		http://www.kannel.org/
 Source0:	http://www.kannel.org/download/1.2.0/gateway-1.2.0.tar.gz
 Source1:	%{name}.init
-Prereq:		/sbin/chkconfig
-BuildRequires:	openssl-devel
-BuildRequires:	mysql-devel
-BuildRequires:	libxml2-devel
-BuildRequires:	jade
+URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
+BuildRequires:	jade
+BuildRequires:	libxml2-devel
+BuildRequires:	mysql-devel
+BuildRequires:	openssl-devel
+Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -38,7 +38,6 @@ touch .depend
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir}}
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,5,8}
@@ -50,18 +49,17 @@ install *.1		$RPM_BUILD_ROOT%{_mandir}/man1
 install *.8		$RPM_BUILD_ROOT%{_mandir}/man8
 
 install index.html	$RPM_BUILD_ROOT/home/httpd/html
-install %{SOURCE1}	$RPM_BUILD_ROOT/%{_sysconfdir}/rc.d/init.d/%{name}
+install %{SOURCE1}	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/chkconfig %{name} reset
 /sbin/chkconfig --add %{name}
 
 %preun
 if [ "$1" = "0" ]; then
-	%{_sysconfdir}/rc.d/init.d/%{name} stop
+	/etc/rc.d/init.d/%{name} stop
 	/sbin/chkconfig --del %{name}
 fi
 
@@ -71,5 +69,5 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 /home/httpd/html/index.html
-%attr(0755,root,root) /etc/rc.d/init.d/mini_httpd
+%attr(755,root,root) /etc/rc.d/init.d/mini_httpd
 %{_mandir}/man*/*
