@@ -12,7 +12,7 @@ Summary:	SMS/WAP gateway
 Summary(pl):	Bramka WAP oraz SMS
 Name:		kannel
 Version:	1.2.0
-Release:	2
+Release:	2.1
 License:	BSD-like (see COPYING)
 Group:		Networking/Daemons
 Source0:	http://www.kannel.org/download/%{version}/gateway-%{version}.tar.gz
@@ -20,6 +20,7 @@ Source0:	http://www.kannel.org/download/%{version}/gateway-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
+Patch0:		%{name}-alpha.patch
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
 BuildRequires:	libxml2-devel
@@ -51,6 +52,7 @@ SMS, wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
 
 %prep
 %setup -q -n gateway-%{version}
+%patch0
 
 %build
 %configure2_13 \
