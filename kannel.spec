@@ -1,6 +1,8 @@
-# --with docs           build documentation
-# --with openssl        link against openssl (requires multithreaded libs)
-# --without mysql       don't link against mysql
+#
+# Conditional build:
+# _with_docs		- build documentation
+# _with_openssl		- link against openssl (requires multithreaded libs)
+# _without_mysql	- don't link against mysql
 #
 # TODO:
 # - upgrade to 1.2.2
@@ -11,7 +13,7 @@ Summary(pl):	Bramka WAP oraz SMS
 Name:		kannel
 Version:	1.2.0
 Release:	2
-License:	BSD-like, see COPYING
+License:	BSD-like (see COPYING)
 Group:		Networking/Daemons
 Source0:	http://www.kannel.org/download/%{version}/gateway-%{version}.tar.gz
 # Source0-md5:	963502f15909ff3e53f5f7b2d8bdb218
@@ -20,8 +22,8 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
-%{?_with_docs:BuildRequires:		jade}
 BuildRequires:	libxml2-devel
+%{?_with_docs:BuildRequires:	openjade}
 # requires multithread enabled openssl (?)
 %{?_with_openssl:BuildRequires:		openssl-devel}
 %{!?_without_mysql:BuildRequires:	mysql-devel}
@@ -41,11 +43,11 @@ clients than just those using WAP phones.
 
 %description -l pl
 Kannel jest bramk± SMS/WAP Open Source. WAP pozwala u¿ywaæ telefonów
-jako prostych przegl±darek hipertekstowych ale korzysta ze
+jako prostych przegl±darek hipertekstowych, ale korzysta ze
 zoptymalizowanych protoko³ów transmisji. Bramka WAP t³umaczy je na
 protoko³y internetowe. Kannel dzia³a równie¿ jako bramka SMS dla sieci
 GSM. Prawie wszystkie telefony GSM mog± odbieraæ i wysy³aæ wiadomo¶ci
-SMS wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
+SMS, wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
 
 %prep
 %setup -q -n gateway-%{version}
@@ -113,9 +115,10 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 #/home/httpd/html/index.html
-%attr(755,root,root) /etc/rc.d/init.d/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_mandir}/man*/*
 
-%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%config(noreplace) %{_sysconfdir}/kannel/kannel.conf
-%config(noreplace) %{_sysconfdir}/kannel/smskannel.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
+%dir %{_sysconfdir}/kannel
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kannel/kannel.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kannel/smskannel.conf
