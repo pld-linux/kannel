@@ -1,13 +1,12 @@
-#
-# Conditional build:
-# _with_doc		- build documentation
-# _with_openssl		- link against openssl (requires multithreaded libs)
-# _without_mysql	- don't link against mysql
-#
 # TODO:
 # - upgrade to 1.2.2
 # - check file list when built with docs
-
+#
+# Conditional build:
+%bcond_with	doc		# build documentation
+%bcond_with	openssl		# link against openssl (requires multithreaded libs)
+%bcond_without	mysql		# don't link against mysql
+#
 Summary:	SMS/WAP gateway
 Summary(pl):	Bramka WAP oraz SMS
 Name:		kannel
@@ -26,10 +25,10 @@ URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
 BuildRequires:	libxml2-devel
 BuildRequires:	autoconf
-%{!?_without_mysql:BuildRequires:	mysql-devel}
-%{?_with_doc:BuildRequires:	openjade}
+%{?with_mysql:BuildRequires:	mysql-devel}
+%{?with_doc:BuildRequires:	openjade}
 # requires multithread enabled openssl (?)
-%{?_with_openssl:BuildRequires:		openssl-devel}
+%{?with_openssl:BuildRequires:		openssl-devel}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -62,9 +61,9 @@ SMS, wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
 %configure \
 	--with-malloc-native \
 	--enable-cookies \
-	--%{!?_without_mysql:en}%{?_without_mysql:dis}able-mysql \
-	%{?_with_openssl: --with-wtls=openssl --with-ssl=%{_prefix} --en}%{!?_with_openssl: --dis}able-ssl \
-	--%{!?_with_doc:dis}%{?_with_doc:en}able-docs
+	--%{?with_mysql:en}%{!?with_mysql:dis}able-mysql \
+	%{?with_openssl: --with-wtls=openssl --with-ssl=%{_prefix} --en}%{!?with_openssl: --dis}able-ssl \
+	--%{!?with_doc:dis}%{?with_doc:en}able-docs
 
 touch .depend
 %{__make} depend
