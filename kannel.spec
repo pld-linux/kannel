@@ -26,7 +26,7 @@ BuildRequires:	libxml2-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
 %{?_with_docs:BuildRequires:	openjade}
 # requires multithread enabled openssl (?)
-%{?_with_openssl:BuildRequires:		openssl-devel}
+%{?_with_openssl:BuildRequires:		openssl-devel >= 0.9.6m}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
