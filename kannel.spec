@@ -1,6 +1,6 @@
 #
 # Conditional build:
-# _with_docs		- build documentation
+# _with_doc		- build documentation
 # _with_openssl		- link against openssl (requires multithreaded libs)
 # _without_mysql	- don't link against mysql
 #
@@ -27,7 +27,7 @@ BuildRequires:	ImageMagick
 BuildRequires:	libxml2-devel
 BuildRequires:	autoconf
 %{!?_without_mysql:BuildRequires:	mysql-devel}
-%{?_with_docs:BuildRequires:	openjade}
+%{?_with_doc:BuildRequires:	openjade}
 # requires multithread enabled openssl (?)
 %{?_with_openssl:BuildRequires:		openssl-devel}
 BuildRequires:	zlib-devel
@@ -64,7 +64,7 @@ SMS, wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
 	--enable-cookies \
 	--%{!?_without_mysql:en}%{?_without_mysql:dis}able-mysql \
 	%{?_with_openssl: --with-wtls=openssl --with-ssl=%{_prefix} --en}%{!?_with_openssl: --dis}able-ssl \
-	--%{!?_with_docs:dis}%{?_with_docs:en}able-docs
+	--%{!?_with_doc:dis}%{?_with_doc:en}able-docs
 
 touch .depend
 %{__make} depend
