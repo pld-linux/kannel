@@ -1,7 +1,0 @@
-# Customized setings for kannel
-
-# Nice level for kannel boxes
-SERVICE_RUN_NICE_LEVEL="+5"
-
-# Configuration file
-CONFIGFILE=/etc/kannel/kannel.conf
