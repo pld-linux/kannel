@@ -28,7 +28,7 @@ BuildRequires:	autoconf
 %{?with_mysql:BuildRequires:	mysql-devel}
 %{?with_doc:BuildRequires:	openjade}
 # requires multithread enabled openssl (?)
-%{?with_openssl:BuildRequires:		openssl-devel}
+%{?with_openssl:BuildRequires:	openssl-devel >= 0.9.7d}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
