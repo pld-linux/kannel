@@ -12,7 +12,7 @@ Summary:	SMS/WAP gateway
 Summary(pl):	Bramka WAP oraz SMS
 Name:		kannel
 Version:	1.2.0
-Release:	2.1
+Release:	3
 License:	BSD-like (see COPYING)
 Group:		Networking/Daemons
 Source0:	http://www.kannel.org/download/%{version}/gateway-%{version}.tar.gz
@@ -23,10 +23,10 @@ Source3:	%{name}.conf
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
 BuildRequires:	libxml2-devel
+%{!?_without_mysql:BuildRequires:	mysql-devel}
 %{?_with_docs:BuildRequires:	openjade}
 # requires multithread enabled openssl (?)
 %{?_with_openssl:BuildRequires:		openssl-devel}
-%{!?_without_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -66,23 +66,14 @@ touch .depend
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir}}
-install -d $RPM_BUILD_ROOT%{_mandir}/man{1,8}
-#install -d $RPM_BUILD_ROOT/home/httpd/html
-
-#install mini_httpd	$RPM_BUILD_ROOT%{_sbindir}
-#install htpasswd	$RPM_BUILD_ROOT%{_bindir}/mini-htpasswd
-#install *.1		$RPM_BUILD_ROOT%{_mandir}/man1
-#install *.8		$RPM_BUILD_ROOT%{_mandir}/man8
-
-# install index.html	$RPM_BUILD_ROOT/home/httpd/html
-install -D %{SOURCE1}	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
-install -D %{SOURCE2}	$RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
-install -D %{SOURCE3}	$RPM_BUILD_ROOT%{_sysconfdir}/kannel/%{name}.conf
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,8}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install -D %{SOURCE1}	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
+install -D %{SOURCE2}	$RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
+install -D %{SOURCE3}	$RPM_BUILD_ROOT%{_sysconfdir}/kannel/%{name}.conf
 install gw/smskannel.conf $RPM_BUILD_ROOT%{_sysconfdir}/kannel/smskannel.conf
 install test/fakesmsc $RPM_BUILD_ROOT%{_bindir}
 install test/fakewap $RPM_BUILD_ROOT%{_bindir}
@@ -114,11 +105,9 @@ fi
 %doc README COPYING NEWS VERSION STATUS doc/{dialup.txt,dlr-mysql.conf,kannel.conf,modems.conf}
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
-#/home/httpd/html/index.html
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%{_mandir}/man*/*
-
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
-%dir %{_sysconfdir}/kannel
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kannel/kannel.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kannel/smskannel.conf
+%dir %{_sysconfdir}/kannel
+%{_mandir}/man*/*
