@@ -1,0 +1,27 @@
+--- gateway-1.2.0/configure.in.orig	2002-06-15 23:48:39.000000000 +0000
++++ gateway-1.2.0/configure.in	2003-12-06 17:34:26.000000000 +0000
+@@ -67,10 +67,10 @@
+ dnl Checks for libraries.
+ 
+ AC_CHECK_LIB(m, log)
+-AC_CHECK_LIB(socket, accept)
+-AC_CHECK_LIB(nsl, inet_ntoa)
+-AC_CHECK_LIB(resolv, inet_ntop)
+-AC_CHECK_LIB(bind, inet_ntop)
++AC_SEARCH_LIBS(accept, socket)
++AC_SEARCH_LIBS(inet_ntoa, nsl)
++AC_SEARCH_LIBS(inet_ntop, resolv)
++AC_SEARCH_LIBS(inet_ntop, bind)
+ AC_CHECK_LIB(pthread, pthread_exit)
+ if test -z "$pthread"; then
+ 	AC_CHECK_LIB(c_r, pthread_exit, [LIBS="$LIBS -lc_r"])
+@@ -94,8 +94,7 @@
+ dnl Checks for library functions.
+ 
+ AC_CHECK_FUNCS(gettimeofday select socket strdup getopt_long)
+-AC_CHECK_FUNC(getopt, , LIBOBJS="$LIBOBJS utils/attgetopt.o")
+-AC_SUBST(LIBOBJS)
++AC_CHECK_FUNC(getopt, , [AC_LIBOBJ([utils/attgetopt])])
+ 
+ dnl Extra feature checks
+ 
