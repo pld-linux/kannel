@@ -23,8 +23,8 @@ Patch0:		%{name}-types.patch
 Patch1:		%{name}-nolibs.patch
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
-BuildRequires:	automake
 BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	libxml2-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 %{?with_doc:BuildRequires:	openjade}
@@ -113,8 +113,8 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kannel/kannel.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kannel/smskannel.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/kannel/kannel.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/kannel/smskannel.conf
 %dir %{_sysconfdir}/kannel
 %{_mandir}/man*/*
