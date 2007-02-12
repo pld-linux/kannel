@@ -8,7 +8,7 @@
 %bcond_without	mysql		# don't link against mysql
 #
 Summary:	SMS/WAP gateway
-Summary(pl):	Bramka WAP oraz SMS
+Summary(pl.UTF-8):   Bramka WAP oraz SMS
 Name:		kannel
 Version:	1.2.0
 Release:	9
@@ -44,13 +44,13 @@ also works as a SMS gateway for GSM networks. Almost all GSM phones
 can send and receive SMS messages, so this is a way to serve many more
 clients than just those using WAP phones.
 
-%description -l pl
-Kannel jest bramk± SMS/WAP Open Source. WAP pozwala u¿ywaæ telefonów
-jako prostych przegl±darek hipertekstowych, ale korzysta ze
-zoptymalizowanych protoko³ów transmisji. Bramka WAP t³umaczy je na
-protoko³y internetowe. Kannel dzia³a równie¿ jako bramka SMS dla sieci
-GSM. Prawie wszystkie telefony GSM mog± odbieraæ i wysy³aæ wiadomo¶ci
-SMS, wiêc pozwala to na obs³ugê wiêkszej liczby klientów.
+%description -l pl.UTF-8
+Kannel jest bramkÄ… SMS/WAP Open Source. WAP pozwala uÅ¼ywaÄ‡ telefonÃ³w
+jako prostych przeglÄ…darek hipertekstowych, ale korzysta ze
+zoptymalizowanych protokoÅ‚Ã³w transmisji. Bramka WAP tÅ‚umaczy je na
+protokoÅ‚y internetowe. Kannel dziaÅ‚a rÃ³wnieÅ¼ jako bramka SMS dla sieci
+GSM. Prawie wszystkie telefony GSM mogÄ… odbieraÄ‡ i wysyÅ‚aÄ‡ wiadomoÅ›ci
+SMS, wiÄ™c pozwala to na obsÅ‚ugÄ™ wiÄ™kszej liczby klientÃ³w.
 
 %prep
 %setup -q -n gateway-%{version}
