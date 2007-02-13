@@ -8,7 +8,7 @@
 %bcond_without	mysql		# don't link against mysql
 #
 Summary:	SMS/WAP gateway
-Summary(pl.UTF-8):   Bramka WAP oraz SMS
+Summary(pl.UTF-8):	Bramka WAP oraz SMS
 Name:		kannel
 Version:	1.2.0
 Release:	9
