@@ -1,21 +1,20 @@
 # TODO:
-# - upgrade to 1.2.2
 # - check file list when built with docs
 #
 # Conditional build:
 %bcond_with	doc		# build documentation
-%bcond_with	openssl		# link against openssl (requires multithreaded libs)
+%bcond_without	openssl		# link against openssl (requires multithreaded libs)
 %bcond_without	mysql		# don't link against mysql
 #
 Summary:	SMS/WAP gateway
 Summary(pl.UTF-8):	Bramka WAP oraz SMS
 Name:		kannel
-Version:	1.2.0
-Release:	9
+Version:	1.4.3
+Release:	1
 License:	BSD-like (see COPYING)
 Group:		Networking/Daemons
 Source0:	http://www.kannel.org/download/%{version}/gateway-%{version}.tar.gz
-# Source0-md5:	963502f15909ff3e53f5f7b2d8bdb218
+# Source0-md5:	8925b147fb7aa01a10fa4f53cfeb03e9
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
@@ -26,8 +25,15 @@ BuildRequires:	ImageMagick
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libxml2-devel
+BuildRequires:	pcre-devel
+BuildRequires:	pam-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
-%{?with_doc:BuildRequires:	openjade}
+%if %{with doc}
+BuildRequires:	openjade
+BuildRequires:	texlive-latex
+BuildRequires:	texlive-latex-ams
+BuildRequires:	texlive-latex-extend
+%endif
 # requires multithread enabled openssl (?)
 %{?with_openssl:BuildRequires:	openssl-devel >= 0.9.7d}
 BuildRequires:	zlib-devel
@@ -55,15 +61,18 @@ SMS, więc pozwala to na obsługę większej liczby klientów.
 %prep
 %setup -q -n gateway-%{version}
 %patch0 -p1
-%patch1 -p1
+#%patch1 -p1
 
 %build
 cp -f /usr/share/automake/config.sub .
 %{__autoconf}
 %configure \
-	--with-malloc-native \
+	CFLAGS="%{rpmcppflags} %{rpmcflags}" \
+	--with-malloc=native \
 	--enable-cookies \
-	--%{?with_mysql:en}%{!?with_mysql:dis}able-mysql \
+	--enable-pcre \
+	--enable-pam \
+	--with%{!?with_mysql:out}-mysql \
 	%{?with_openssl: --with-wtls=openssl --with-ssl=%{_prefix} --en}%{!?with_openssl: --dis}able-ssl \
 	--%{!?with_doc:dis}%{?with_doc:en}able-docs
 
@@ -109,7 +118,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README COPYING NEWS VERSION STATUS doc/{dialup.txt,dlr-mysql.conf,kannel.conf,modems.conf}
+%doc LICENSE README COPYING NEWS VERSION STATUS doc/{*.txt,examples/*.conf}
+%doc doc/ChangeLog*
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
