@@ -58,6 +58,30 @@ protokoły internetowe. Kannel działa również jako bramka SMS dla sieci
 GSM. Prawie wszystkie telefony GSM mogą odbierać i wysyłać wiadomości
 SMS, więc pozwala to na obsługę większej liczby klientów.
 
+%package devel
+Summary:	Header files for %{name} library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki %{name}
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description devel
+Header files for %{name} library.
+
+%description devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki %{name}.
+
+%package static
+Summary:	Static %{name} library
+Summary(pl.UTF-8):	Statyczna biblioteka %{name}
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static %{name} library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka %{name}.
+
 %prep
 %setup -q -n gateway-%{version}
 %patch0 -p1
@@ -128,3 +152,11 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/kannel/smskannel.conf
 %dir %{_sysconfdir}/kannel
 %{_mandir}/man*/*
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/%{name}
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/%{name}
