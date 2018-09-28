@@ -25,9 +25,9 @@ BuildRequires:	ImageMagick
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libxml2-devel
-BuildRequires:	pcre-devel
-BuildRequires:	pam-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
+BuildRequires:	pam-devel
+BuildRequires:	pcre-devel
 %if %{with doc}
 BuildRequires:	openjade
 BuildRequires:	texlive-latex
@@ -114,9 +114,9 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,8}}
 install -D %{SOURCE1}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install -D %{SOURCE2}	$RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install -D %{SOURCE3}	$RPM_BUILD_ROOT%{_sysconfdir}/kannel/%{name}.conf
-install gw/smskannel.conf $RPM_BUILD_ROOT%{_sysconfdir}/kannel/smskannel.conf
-install test/fakesmsc $RPM_BUILD_ROOT%{_bindir}
-install test/fakewap $RPM_BUILD_ROOT%{_bindir}
+cp -p gw/smskannel.conf $RPM_BUILD_ROOT%{_sysconfdir}/kannel/smskannel.conf
+cp -p test/fakesmsc $RPM_BUILD_ROOT%{_bindir}
+cp -p test/fakewap $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
