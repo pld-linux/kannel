@@ -1,0 +1,133 @@
+--- gateway-1.4.5.orig/wap/wtls_statesupport.c	2018-01-17 10:24:38.000000000 +0100
++++ gateway-1.4.5/wap/wtls_statesupport.c	2018-09-28 12:41:57.816649426 +0200
+@@ -839,8 +839,8 @@
+ {
+    Octstr *result;
+    unsigned char *output, iv[20], c[2];
+-   des_key_schedule des_ks;
+-   des_cblock des_key, des_iv;
++   DES_key_schedule des_ks;
++   DES_cblock des_key, des_iv;
+    int i, len = octstr_len(data);
+ 
+    if (!data)
+@@ -874,14 +874,14 @@
+              octstr_get_cstr(wtls_machine->client_write_enc_key),
+              sizeof(des_key));
+    }
+-   des_set_odd_parity(&des_key);
+-   if (des_set_key_checked(&des_key, des_ks)) {
++   DES_set_odd_parity(&des_key);
++   if (DES_set_key_checked(&des_key, &des_ks)) {
+       error(0, "wtls_des ~> Unable to set key schedule");
+       return (NULL);
+    }
+    output = (unsigned char *)gw_malloc((len + 1) * sizeof(unsigned char));
+-   des_ncbc_encrypt((unsigned char *)octstr_get_cstr(data), output, len,
+-          des_ks, &des_iv, crypt);
++   DES_ncbc_encrypt((unsigned char *)octstr_get_cstr(data), output, len,
++          &des_ks, &des_iv, crypt);
+    result = octstr_create_from_data((char *)output, len);
+          gw_free(output);
+ 
+@@ -891,13 +891,13 @@
+ Octstr *wtls_rc5(Octstr * data, WTLSMachine * wtls_machine, int crypt)
+ {
+    Octstr *result;
+-   EVP_CIPHER_CTX ectx;
++   EVP_CIPHER_CTX *ectx;
+    unsigned char ebuf[20], *output, *input, iv[20], c[2];
+    int i = 0, len = octstr_len(data);
+ 
+    if (!data)
+       return (NULL);
+-   EVP_CipherInit(&ectx, ALG, NULL, NULL, crypt);
++   EVP_CipherInit(ectx, ALG, NULL, NULL, crypt);
+    switch (wtls_machine->bulk_cipher_algorithm) {
+    case RC5_CBC_40:
+    case RC5_CBC_56:
+@@ -908,7 +908,7 @@
+       i = 16;
+       break;
+    }
+-   EVP_CIPHER_CTX_ctrl(&ectx, EVP_CTRL_SET_RC5_ROUNDS, i, NULL);
++   EVP_CIPHER_CTX_ctrl(ectx, EVP_CTRL_SET_RC5_ROUNDS, i, NULL);
+    if (crypt == RC5_ENCRYPT) {
+       memcpy(iv, octstr_get_cstr(wtls_machine->server_write_IV),
+         octstr_len(wtls_machine->server_write_IV));
+@@ -917,7 +917,7 @@
+       for (i = 0; i < bulk_table[wtls_machine->bulk_cipher_algorithm].
+             iv_size; i++)
+          iv[i] = iv[i] ^ c[i % 2];
+-      EVP_CipherInit(&ectx, NULL, (unsigned char *)octstr_get_cstr(
++      EVP_CipherInit(ectx, NULL, (unsigned char *)octstr_get_cstr(
+          wtls_machine->server_write_enc_key), iv, RC5_ENCRYPT);
+    } else {
+       memcpy(iv, octstr_get_cstr(wtls_machine->client_write_IV),
+@@ -927,7 +927,7 @@
+       for (i = 0; i < bulk_table[wtls_machine->bulk_cipher_algorithm].
+             iv_size; i++)
+          iv[i] = iv[i] ^ c[i % 2];
+-      EVP_CipherInit(&ectx, NULL, (unsigned char *)octstr_get_cstr(
++      EVP_CipherInit(ectx, NULL, (unsigned char *)octstr_get_cstr(
+          wtls_machine->client_write_enc_key), iv, RC5_DECRYPT);
+    }
+ 
+@@ -936,13 +936,13 @@
+    i = 0;
+ 
+    for (i = 0; i <= len - 8; i += 8) {
+-      EVP_Cipher(&ectx, ebuf, input + i, 8);
++      EVP_Cipher(ectx, ebuf, input + i, 8);
+       memmove(output + i, ebuf, 8);
+    }
+         
+    // Leftovers...
+    if (i < len) {
+-      EVP_Cipher(&ectx, ebuf, input + i, len - i);
++      EVP_Cipher(ectx, ebuf, input + i, len - i);
+       memmove(output + i, ebuf, len - i);
+    }
+ 
+@@ -1052,7 +1052,7 @@
+ {
+    RSA *rsaStructure = NULL;
+    EVP_PKEY *publicKey = NULL;
+-   BIGNUM *modulus = 0, *exponent = NULL;
++   const BIGNUM *modulus = 0, *exponent = NULL;
+    unsigned char *tempModulusStorage = 0, *tempExponentStorage = NULL;
+    int numbytes = 0;
+    RSAPublicKey *returnStructure = NULL;
+@@ -1060,17 +1060,17 @@
+         
+         /* First, we need to extract the RSA structure from the X509 Cert */
+         /* Get the EVP_PKEY structure from the X509 cert */
+-        publicKey = X509_PUBKEY_get(x509_cert->cert_info->key);
++        publicKey = X509_PUBKEY_get( X509_get_X509_PUBKEY(x509_cert) );
+         
+         /* Take said EVP_PKEY structure and get the RSA component */
+-   if (EVP_PKEY_type(publicKey->type) != EVP_PKEY_RSA) {
++   if (  EVP_PKEY_base_id(publicKey) != EVP_PKEY_RSA) {
+                 return NULL;
+    } else {
+-                rsaStructure = publicKey->pkey.rsa;
++                rsaStructure = EVP_PKEY_get0_RSA(publicKey);
+         }
+         
+-        /* Then we need to grab the exponent component from the cert */
+-        exponent = rsaStructure->e;
++        /* Then we need to grab the exponent and modulus component from the cert */
++	RSA_get0_key( rsaStructure, &modulus, &exponent, NULL);
+         
+         /* We need to allocate sufficient memory to hold the exponent */
+         numbytes = BN_num_bytes(exponent);
+@@ -1083,9 +1083,6 @@
+    Exponent = octstr_create_from_data((char *)tempExponentStorage,
+                   numbytes);
+ 
+-        /* Then we need to grab the modulus component from the cert */
+-        modulus = rsaStructure->n;
+-        
+         /* We need to allocate sufficient memory to hold the modulus */
+         numbytes = BN_num_bytes(modulus);
+         tempModulusStorage = gw_malloc(numbytes);

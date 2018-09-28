@@ -19,6 +19,7 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
 Patch0:		%{name}-bison.patch
+Patch1:		%{name}-openssl-1.1.0.patch
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
 BuildRequires:	autoconf
@@ -60,6 +61,7 @@ SMS, więc pozwala to na obsługę większej liczby klientów.
 %prep
 %setup -q -n gateway-%{version}
 %patch0 -p1
+%patch1 -p1
 
 %build
 cp -f /usr/share/automake/config.sub .
