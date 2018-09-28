@@ -30,12 +30,13 @@
     result = octstr_create_from_data((char *)output, len);
           gw_free(output);
  
-@@ -891,13 +891,13 @@
+@@ -891,13 +891,14 @@
  Octstr *wtls_rc5(Octstr * data, WTLSMachine * wtls_machine, int crypt)
  {
     Octstr *result;
 -   EVP_CIPHER_CTX ectx;
 +   EVP_CIPHER_CTX *ectx;
++   ectx = EVP_CIPHER_CTX_new();
     unsigned char ebuf[20], *output, *input, iv[20], c[2];
     int i = 0, len = octstr_len(data);
  
@@ -89,6 +90,14 @@
        memmove(output + i, ebuf, len - i);
     }
  
+@@ -946,6 +946,7 @@
+       memmove(output + i, ebuf, len - i);
+    }
+
++   EVP_CIPHER_CTX_free(ectx);
+    result = octstr_create_from_data((char *)output, len);
+          gw_free(output);
+    return (result);
 @@ -1052,7 +1052,7 @@
  {
     RSA *rsaStructure = NULL;
