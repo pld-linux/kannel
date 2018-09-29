@@ -1,0 +1,11 @@
+--- gateway-1.4.5/Makefile.in~	2018-06-19 17:36:36.000000000 +0200
++++ gateway-1.4.5/Makefile.in	2018-09-29 21:28:44.484927713 +0200
+@@ -376,7 +376,7 @@
+ 		"@VERSION@" > gw-config
+ 	chmod 0755 gw-config
+ 
+-$(SUBDIRS):
++$(SUBDIRS): libgwlib.a
+ 	$(MAKE) -C $@ $(MAKECMDGOALS)
+ 	
+ am--refresh:
