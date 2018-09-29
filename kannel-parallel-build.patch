@@ -5,7 +5,7 @@
  	chmod 0755 gw-config
  
 -$(SUBDIRS):
-+$(SUBDIRS): libgwlib.a
++$(SUBDIRS): $(libs)
  	$(MAKE) -C $@ $(MAKECMDGOALS)
  	
  am--refresh:
