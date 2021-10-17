@@ -1,0 +1,26 @@
+diff -ur gateway-1.4.5/gw/wap_push_ota.c gateway-1.4.5-gcc10/gw/wap_push_ota.c
+--- gateway-1.4.5/gw/wap_push_ota.c	2018-01-17 10:24:38.000000000 +0100
++++ gateway-1.4.5-gcc10/gw/wap_push_ota.c	2021-10-17 22:08:54.582360839 +0200
+@@ -113,7 +113,7 @@
+ 
+ static List *ota_queue = NULL;
+ 
+-wap_dispatch_func_t *dispatch_to_wsp;
++extern wap_dispatch_func_t *dispatch_to_wsp;
+ wap_dispatch_func_t *dispatch_to_wsp_unit;
+ 
+ /**************************************************************************
+diff -ur gateway-1.4.5/wap/wtp_init.c gateway-1.4.5-gcc10/wap/wtp_init.c
+--- gateway-1.4.5/wap/wtp_init.c	2018-01-17 10:24:38.000000000 +0100
++++ gateway-1.4.5-gcc10/wap/wtp_init.c	2021-10-17 22:08:13.404881915 +0200
+@@ -100,8 +100,8 @@
+  */
+ static enum { limbo, running, terminating } initiator_run_status = limbo;
+ 
+-static wap_dispatch_func_t *dispatch_to_wdp;
+-static wap_dispatch_func_t *dispatch_to_wsp;
++extern wap_dispatch_func_t *dispatch_to_wdp;
++extern wap_dispatch_func_t *dispatch_to_wsp;
+ 
+ /*
+  * This is a timer 'tick'. All timer values multiplies of this value.
