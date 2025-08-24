@@ -1,0 +1,23 @@
+From: Guillem Jover <gjover@sipwise.com>
+Date: Fri, 27 Sep 2024 23:19:10 +0200
+Subject: Add missing includes in configure check for OpenSSL
+
+With the new -Werror=implicit-function-declaration build flag set by
+dpkg-buildflags the configure check for OpenSSL fails due to a missing
+include for exit(3).
+---
+ configure.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.in b/configure.in
+index 990ddf5..16b7db0 100644
+--- a/configure.in
++++ b/configure.in
+@@ -965,6 +965,7 @@ if test "x$ssllib" != "x" && test "x$sslinc" != "x"; then
+                        openssl/hmac.h)
+       AC_MSG_CHECKING(whether the OpenSSL library is multithread-enabled)
+       AC_TRY_RUN([
++        #include <stdlib.h>
+         #define OPENSSL_THREAD_DEFINES
+         #include <openssl/opensslconf.h>
+         int main(void) {

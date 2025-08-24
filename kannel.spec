@@ -10,7 +10,7 @@ Summary:	SMS/WAP gateway
 Summary(pl.UTF-8):	Bramka WAP oraz SMS
 Name:		kannel
 Version:	1.4.5
-Release:	5
+Release:	6
 License:	BSD-like (see COPYING)
 Group:		Networking/Daemons
 Source0:	http://www.kannel.org/download/%{version}/gateway-%{version}.tar.gz
@@ -22,6 +22,9 @@ Patch0:		%{name}-bison.patch
 Patch1:		%{name}-openssl-1.1.0.patch
 Patch2:		%{name}-parallel-build.patch
 Patch3:		gcc10.patch
+Patch4:		37_define_DEFAULT_SOURCE.patch
+Patch5:		fix-build-with-autoconf-2.7.patch
+Patch6:		80_implicit_func.patch
 URL:		http://www.kannel.org/
 BuildRequires:	ImageMagick
 BuildRequires:	autoconf
@@ -90,6 +93,9 @@ Statyczna biblioteka %{name}.
 %patch -P1 -p1
 %patch -P2 -p1
 %patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
 
 %build
 cp -f /usr/share/automake/config.sub .

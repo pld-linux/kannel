@@ -1,0 +1,51 @@
+From: Jonas Smedegaard <dr@jones.dk>
+Date: Fri, 27 Sep 2024 23:19:10 +0200
+Subject: Define _DEFAULT_SOURCE (not _VSD_SOURCE or _SVID_SOURCE)
+
+---
+ addons/opensmppbox/configure.in | 2 +-
+ addons/sqlbox/configure.in      | 2 +-
+ gwlib/gw_uuid.c                 | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/addons/opensmppbox/configure.in b/addons/opensmppbox/configure.in
+index f73b57e..08cd25f 100644
+--- a/addons/opensmppbox/configure.in
++++ b/addons/opensmppbox/configure.in
+@@ -138,7 +138,7 @@ case "$host" in
+     LIBS="$LIBS -L/opt/local/lib" 
+     ;;
+   *-linux-*)
+-    CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600 -D_BSD_SOURCE"
++    CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600 -D_DEFAULT_SOURCE"
+     LDFLAGS="$LDFLAGS -rdynamic"
+     ;;
+   *-*-openbsd* | *-*-freebsd*)
+diff --git a/addons/sqlbox/configure.in b/addons/sqlbox/configure.in
+index 575db0d..f2e140e 100644
+--- a/addons/sqlbox/configure.in
++++ b/addons/sqlbox/configure.in
+@@ -162,7 +162,7 @@ case "$host" in
+     LIBTOOL="libtool -static -o"
+     ;;
+   *-linux-*)
+-    CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600 -D_BSD_SOURCE"
++    CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600 -D_DEFAULT_SOURCE"
+     LDFLAGS="$LDFLAGS -rdynamic"
+     ;;
+   *-*-openbsd* | *-*-freebsd*)
+diff --git a/gwlib/gw_uuid.c b/gwlib/gw_uuid.c
+index 102cb50..b1b48b5 100644
+--- a/gwlib/gw_uuid.c
++++ b/gwlib/gw_uuid.c
+@@ -13,8 +13,8 @@
+  * Force inclusion of SVID stuff since we need it if we're compiling in
+  * gcc-wall wall mode
+  */
+-#ifndef _SVID_SOURCE
+-#define _SVID_SOURCE
++#ifndef _DEFAULT_SOURCE
++#define _DEFAULT_SOURCE
+ #endif
+ 
+ #include "gw-config.h"
