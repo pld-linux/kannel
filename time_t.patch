@@ -1,0 +1,52 @@
+diff -ur gateway-1.4.5.orig/gw/msg-decl.h gateway-1.4.5/gw/msg-decl.h
+--- gateway-1.4.5.orig/gw/msg-decl.h	2018-01-17 10:24:38.000000000 +0100
++++ gateway-1.4.5/gw/msg-decl.h	2025-09-08 01:44:29.026662402 +0200
+@@ -83,7 +83,7 @@
+         OCTSTR(receiver)
+         OCTSTR(udhdata)
+         OCTSTR(msgdata)
+-        INTEGER(time)
++        TIME_T(time)
+         OCTSTR(smsc_id)
+         OCTSTR(smsc_number)
+         OCTSTR(foreign_id)
+@@ -109,14 +109,14 @@
+         VOID(split_parts)
+         INTEGER(priority)
+         INTEGER(resend_try)
+-        INTEGER(resend_time)
++        TIME_T(resend_time)
+         OCTSTR(meta_data)
+     })
+ 
+ MSG(ack,
+     {
+         INTEGER(nack)
+-        INTEGER(time)
++        TIME_T(time)
+         UUID(id)
+     })
+     
+diff -ur gateway-1.4.5.orig/gw/msg.h gateway-1.4.5/gw/msg.h
+--- gateway-1.4.5.orig/gw/msg.h	2018-01-17 10:24:38.000000000 +0100
++++ gateway-1.4.5/gw/msg.h	2025-09-08 01:43:43.523329070 +0200
+@@ -79,6 +79,7 @@
+ typedef struct {
+ 	enum msg_type type;
+ 
++	#define TIME_T(name) time_t name;
+ 	#define INTEGER(name) long name;
+ 	#define OCTSTR(name) Octstr *name;
+ 	#define UUID(name) uuid_t name;
+diff -ur gateway-1.4.5.orig/gw/smsc/smsc_smpp.c gateway-1.4.5/gw/smsc/smsc_smpp.c
+--- gateway-1.4.5.orig/gw/smsc/smsc_smpp.c	2018-03-08 12:26:39.000000000 +0100
++++ gateway-1.4.5/gw/smsc/smsc_smpp.c	2025-09-08 01:46:36.423329073 +0200
+@@ -1170,7 +1170,7 @@
+ }
+ 
+ 
+-static int send_enquire_link(SMPP *smpp, Connection *conn, long *last_sent)
++static int send_enquire_link(SMPP *smpp, Connection *conn, time_t *last_sent)
+ {
+     SMPP_PDU *pdu;
+     Octstr *os;
