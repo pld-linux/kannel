@@ -31,7 +31,7 @@ BuildRequires:	ImageMagick
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libxml2-devel
-%{?with_mysql:BuildRequires:	mysql-devel}
+%{?with_mysql:BuildRequires:	mysql-devel < 8.0}
 BuildRequires:	pam-devel
 BuildRequires:	pcre-devel
 %if %{with doc}
